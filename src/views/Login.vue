@@ -1,24 +1,37 @@
 <template>
   <div class="login-page">
-    <!-- Circle with Icon -->
-    <div class="icon-container">
-      <div class="circle">
-        <i class="fas fa-user"></i>
-      </div>
-      <div class="orbit"></div>
+    <!-- Logo -->
+    <div class="logo-container">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="80"
+        height="80"
+        fill="currentColor"
+        class="logo"
+      >
+        <path d="M5 22h14l-4-12V4h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v6L5 22Zm7-12.586L14.586 18H9.414L12 9.414ZM9.414 20h5.172l.5 1H8.914l.5-1ZM13 6h-2V4h2v2Z" />
+      </svg>
     </div>
 
-    <!-- Welcome Text -->
-    <div class="welcome-text">
-      <h1>LabSolve</h1>
-      <p>For all your booking needs</p>
-    </div>
+    <!-- Title -->
+    <h1 class="title">Lab Management System</h1>
 
     <!-- Login Form -->
     <form class="login-form" @submit.prevent="login">
-      <input v-model="username" placeholder="Username" />
-      <input type="password" v-model="password" placeholder="Password" />
-      <button type="submit" class="btn login-btn">Log In</button>
+      <label for="email" class="label">Email</label>
+      <input id="email" v-model="username" placeholder="Enter your email" class="input" />
+
+      <label for="password" class="label">Password</label>
+      <input
+        id="password"
+        type="password"
+        v-model="password"
+        placeholder="Enter your password"
+        class="input"
+      />
+
+      <button type="submit" class="btn login-btn">Sign In</button>
     </form>
   </div>
 </template>
@@ -64,84 +77,60 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #fff;
-  text-align: center;
+  background-color: #f9f9f9;
   font-family: Arial, sans-serif;
 }
 
-/* Icon and Circle */
-.icon-container {
-  position: relative;
+/* Logo */
+.logo-container {
+  text-align: center;
   margin-bottom: 20px;
 }
 
-.circle {
-  width: 80px;
-  height: 80px;
-  border: 2px solid black;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
+.logo {
+  fill: #1a73e8;
 }
 
-.orbit {
-  position: absolute;
-  top: -20px;
-  left: -20px;
-  width: 120px;
-  height: 120px;
-  border: 2px dotted black;
-  border-radius: 50%;
+/* Title */
+.title {
+  font-size: 24px;
+  color: black; /* Set title color to black */
+  margin: 10px 0 20px;
+  font-weight: bold;
 }
 
-/* Welcome Text */
-.welcome-text {
-  width: 100%; /* Ensures it spans the full width of the parent */
-  max-width: 300px; /* Restricts the maximum width for desktop and mobile */
-  margin: 0 auto; /* Centers the text within its parent container */
-  text-align: center; /* Ensures the text remains centered */
-  padding: 0 10px; /* Adds padding for mobile accessibility */
-  box-sizing: border-box; /* Includes padding in width calculations */
+/* Labels */
+.label {
+  font-size: 14px;
+  color: black; /* Set label color to black */
+  margin-bottom: 5px;
+  text-align: left;
+  display: block;
 }
 
-.welcome-text h1 {
-  font-size: 24px; /* Adjust as needed for mobile readability */
-  margin: 10px 0;
-}
-
-.welcome-text p {
-  font-size: 14px; /* Smaller font size for the description */
-  color: #555; /* Subtle color for text */
-  word-wrap: break-word; /* Ensures long words break into a new line */
-}
-
-/* Login Form */
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 20px 0;
+/* Input Fields */
+.input {
   width: 100%;
   max-width: 300px;
-}
-
-.login-form input {
   padding: 10px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
-.login-form input:focus {
+.input:focus {
   outline: none;
-  border-color: black;
+  border-color: #1a73e8;
 }
 
+/* Login Button */
 .login-btn {
-  background-color: black;
+  background-color: #1a73e8;
   color: white;
+  width: 100%;
+  max-width: 300px;
   padding: 10px 0;
   border: none;
   border-radius: 5px;
@@ -149,34 +138,7 @@ export default {
   cursor: pointer;
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .circle {
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
-  }
-
-  .orbit {
-    width: 90px;
-    height: 90px;
-  }
-
-  .welcome-text h1 {
-    font-size: 20px;
-  }
-
-  .welcome-text p {
-    font-size: 12px;
-  }
-
-  .login-form {
-    max-width: 250px;
-  }
-
-  .login-btn {
-    padding: 8px 15px;
-    font-size: 12px;
-  }
+.login-btn:hover {
+  background-color: #155bb5;
 }
 </style>
