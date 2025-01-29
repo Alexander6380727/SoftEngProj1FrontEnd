@@ -1,5 +1,8 @@
 <template>
   <div class="dashboard-box" @click="navigate">
+    <svg v-if="icon" :class="`icon-${icon}`" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+      <use :xlink:href="`#${icon}`"></use>
+    </svg>
     <slot></slot>
   </div>
 </template>
@@ -10,6 +13,10 @@ export default {
     route: {
       type: String,
       required: true,
+    },
+    icon: {
+      type: String,
+      default: null,
     },
   },
   methods: {
@@ -39,5 +46,11 @@ export default {
 .dashboard-box:hover {
   background-color: #e0e0e0;
   border-color: #007bff;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
 }
 </style>
