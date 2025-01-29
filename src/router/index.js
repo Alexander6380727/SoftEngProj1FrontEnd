@@ -1,17 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '@/views/Login.vue';
-import AdminPage from '@/views/AdminPage.vue';
-import UserPage from '@/views/UserPage.vue';
-import BookRoomPage from "../views/BookRoomPage.vue";
-import InventoryPage from "../views/InventoryPage.vue";
+import Register from "../views/Register.vue";
+import Dashboard from "../views/Dashboard.vue";
+import BookRoom from "../views/BookRoomPage.vue";
+import Inventory from "../views/InventoryPage.vue";
 
 const routes = [
-  { path: '/', name: 'Login', component: Login },
-  { path: '/admin', name: 'AdminPage', component: AdminPage, meta: { role: 'admin' } },
-  { path: '/user', name: 'UserPage', component: UserPage, meta: { role: 'user' } },
-  { path: "/book-room", name: "BookRoom", component: BookRoomPage,},
-  { path: "/inventory", name: "Inventory", component: InventoryPage,},
-  { path: "/", redirect: "/dashboard",},
+  { path: "/", component: Login },
+  { path: "/dashboard", component: Dashboard },
+  { path: "/book-room", component: BookRoom },
+  { path: "/inventory", component: Inventory },
+  { path: "/register", component: Register },
 ];
 
 const router = createRouter({
