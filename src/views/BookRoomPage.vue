@@ -73,11 +73,10 @@ export default {
       // Logic to handle booking confirmation
       const booking = {
         user_id: this.userId, // Use the actual user ID
-        roomId: this.selectedRoom.id,
-        bookingDate: this.selectedDate,
-        bookingTime: this.selectedTime,
+        room_id: this.selectedRoom.id,
+        booking_date: this.selectedDate,
+        booking_time: this.selectedTime,
         purpose: this.bookingPurpose,
-        status: 'confirmed'
       };
 
       console.log('Booking data:', booking); // Log the booking data
