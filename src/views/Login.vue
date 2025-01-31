@@ -1,15 +1,18 @@
 <template>
   <div class="login-page">
-    <h1>Lab Management System</h1>
 
-    <form @submit.prevent="login">
+    <form @submit.prevent="login" class="login-form">
+      <div style="text-align: center;">
+        <h1>LabSolve</h1>
+      </div>
+      
       <label>Username</label>
       <input v-model="username" placeholder="Enter your username" required />
 
       <label>Password</label>
       <input v-model="password" type="password" placeholder="Enter your password" required />
 
-      <button type="submit">Sign In</button>
+      <button type="submit" class="login-btn">Sign In</button>
     </form>
   </div>
 </template>
@@ -57,26 +60,16 @@ export default {
   font-family: Arial, sans-serif;
 }
 
-/* Logo */
-.logo-container {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.logo {
-  fill: #1a73e8;
-}
-
-/* Title */
-.title {
-  font-size: 24px;
-  color: black; /* Set title color to black */
-  margin: 10px 0 20px;
-  font-weight: bold;
+/* Login Form */
+.login-form {
+  background-color: white;
+  padding: 70px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
 }
 
 /* Labels */
-.label {
+label {
   font-size: 14px;
   color: black; /* Set label color to black */
   margin-bottom: 5px;
@@ -85,7 +78,7 @@ export default {
 }
 
 /* Input Fields */
-.input {
+input {
   width: 100%;
   max-width: 300px;
   padding: 10px;
@@ -96,14 +89,14 @@ export default {
   box-sizing: border-box;
 }
 
-.input:focus {
+input:focus {
   outline: none;
-  border-color: #1a73e8;
+  border-color: #1976D2; /* Use primary color */
 }
 
 /* Login Button */
 .login-btn {
-  background-color: #1a73e8;
+  background-color: #1976D2; /* Use primary color */
   color: white;
   width: 100%;
   max-width: 300px;
@@ -115,6 +108,6 @@ export default {
 }
 
 .login-btn:hover {
-  background-color: #155bb5;
+  background-color: #155a8a; 
 }
 </style>

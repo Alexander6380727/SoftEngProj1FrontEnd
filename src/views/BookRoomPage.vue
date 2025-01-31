@@ -132,11 +132,11 @@ export default {
 
 .input:focus {
   outline: none;
-  border-color: #1a73e8;
+  border-color: #1976D2; /* Use primary color */
 }
 
 .btn {
-  background-color: #1a73e8;
+  background-color: #1976D2; /* Use primary color */
   color: white;
   width: 100%;
   max-width: 300px;
@@ -148,6 +148,6 @@ export default {
 }
 
 .btn:hover {
-  background-color: #155bb5;
+  background-color: #155a8a; /* Darker shade on hover */
 }
 </style>

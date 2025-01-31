@@ -5,7 +5,7 @@
       <DashboardBox route="/book-room" icon="calendar">
         Book Room
       </DashboardBox>
-      <DashboardBox route="/inventory" icon="inventory">
+      <DashboardBox route="/inventory" icon="box">
         View Inventory
       </DashboardBox>
     </div>
@@ -13,14 +13,13 @@
     <div v-if="bookings.length === 0">No upcoming bookings.</div>
     <ul v-else>
       <li v-for="booking in bookings" :key="booking.room_id">
-        Room: {{ booking.room_id }}, Date: {{ booking.booking_date }}, Time: {{ booking.booking_time }}
+        Room: {{ booking.room_id }}, Date: {{ booking.booking_date }}, Time: {{ booking.start_time }} - {{ booking.end_time }}
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-
 import DashboardBox from "../components/DashboardBox.vue";
 
 export default {
@@ -35,20 +34,31 @@ export default {
   },
   methods: {
     fetchUserBookings() {
-      const userId = 'user'; // Hardcoded user ID for testing
-      fetch(`http://127.0.0.1:8000/booking/user-bookings/${userId}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Failed to fetch bookings');
-          }
-          return response.json();
-        })
-        .then(data => {
-          this.bookings = data.bookings; // Store bookings in the component state
-        })
-        .catch(error => {
-          console.error('Error fetching bookings:', error);
-        });
+      const token = localStorage.getItem('access_token'); // Retrieve the token from local storage
+      if (!token) {
+        console.error('No access token found');
+        return;
+      }
+
+      // Fetch bookings using the token
+      fetch(`http://127.0.0.1:8000/booking/user-bookings`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch bookings');
+        }
+        return response.json();
+      })
+      .then(data => {
+        this.bookings = data.bookings; // Store bookings in the component state
+      })
+      .catch(error => {
+        console.error('Error fetching bookings:', error);
+      });
     }
   }
 };
@@ -56,7 +66,14 @@ export default {
 
 <style scoped>
 .user-page {
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+  padding: 5rem;
   text-align: center;
 }
 

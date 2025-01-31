@@ -30,27 +30,29 @@ export default {
 <style scoped>
 .dashboard-box {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 150px;
   height: 100px;
   margin: 10px;
-  border: 2px solid #ccc;
+  border: 1px solid #1976D2; /* Use primary color */
   border-radius: 8px;
   text-align: center;
   background-color: #f9f9f9;
   cursor: pointer;
   transition: 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
 }
 
 .dashboard-box:hover {
   background-color: #e0e0e0;
-  border-color: #007bff;
+  border-color: #155a8a; /* Darker shade on hover */
 }
 
 .icon {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   margin-bottom: 10px;
 }
 </style>

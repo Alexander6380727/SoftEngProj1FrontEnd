@@ -1,0 +1,48 @@
+/* Global Styles */
+body {
+  font-family: 'Arial', sans-serif; /* Use a consistent font */
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5; /* Set the global background color */
+}
+
+h1, h2, h3 {
+  color: #333; /* Dark text for headings */
+}
+
+.dashboard-grid {
+  display: flex;
+  justify-content: space-around; /* Space out dashboard boxes */
+  margin: 20px 0;
+}
+
+button {
+  background-color: forestgreen; /* Primary color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #155a8a; /* Darker shade on hover */
+}
+
+input, select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%; /* Full width for inputs */
+  box-sizing: border-box; /* Include padding in width */
+}
+
+input:focus, select:focus {
+  border-color: #1976D2; /* Highlight border on focus */
+}
+
+h1 {
+  color: #1976D2; /* Use primary color */
+  font-size: 350;
+  font-weight: bold;
+}

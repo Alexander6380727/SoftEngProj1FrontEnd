@@ -31,12 +31,15 @@ export default {
 
 <style scoped>
 .book-room-box {
-  border: 1px solid #ccc;
+  border: 1px solid #1976D2; /* Use primary color */
   border-radius: 8px;
   padding: 20px;
   text-align: center;
   cursor: pointer;
-  transition: background-color 0.3s;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s, box-shadow 0.3s; /* Add transition for shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
 }
 
 .book-room-box.selected {
@@ -44,7 +47,8 @@ export default {
 }
 
 .book-room-box:hover {
-  background-color: #f0f0f0;
+  background-color: #e0e0e0;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
 }
 
 .available {
