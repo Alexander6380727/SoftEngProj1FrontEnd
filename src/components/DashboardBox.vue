@@ -1,27 +1,30 @@
 <template>
   <div class="dashboard-box" @click="navigate">
-    <svg v-if="icon" :class="`icon-${icon}`" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-      <use :xlink:href="`#${icon}`"></use>
-    </svg>
-    <slot></slot>
+    <i :class="['fa', icon]" class="dashboard-icon"></i>
+    <p class="dashboard-text">{{ name }}</p>
   </div>
 </template>
 
 <script>
 export default {
+  name: "DashboardBox",
   props: {
     route: {
       type: String,
-      required: true,
+      required: true, // The route to navigate to, like "/book-room"
+    },
+    name: {
+      type: String,
+      required: true, // The name of the dashboard item, like "Book Room"
     },
     icon: {
       type: String,
-      default: null,
+      required: true, // FontAwesome icon to show, like "fa-calendar"
     },
   },
   methods: {
     navigate() {
-      this.$router.push(this.route);
+      this.$router.push(this.route); // Navigate to the route when clicked
     },
   },
 };
@@ -29,30 +32,31 @@ export default {
 
 <style scoped>
 .dashboard-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  height: 100px;
-  margin: 10px;
   border: 1px solid #1976D2; /* Use primary color */
   border-radius: 8px;
+  padding: 20px;
   text-align: center;
-  background-color: #f9f9f9;
   cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
+  margin: 10px;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard-box:hover {
-  background-color: #e0e0e0;
-  border-color: #155a8a; /* Darker shade on hover */
+  background-color: #e3f2fd; /* Light blue on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
 }
 
-.icon {
-  width: 50px;
-  height: 50px;
+.dashboard-text {
+  font-size: 16px; /* Adjust font size as needed */
+  font-weight: bold; /* Optional: make the text bold */
+  color: black; /* Make the font color explicitly black */
+  margin-top: 10px;
+}
+
+.dashboard-icon {
+  font-size: 30px;
+  color: #1976D2; /* Primary color for icons */
   margin-bottom: 10px;
 }
 </style>

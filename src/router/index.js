@@ -6,7 +6,7 @@ import BookRoom from "../views/BookRoomPage.vue";
 import Inventory from "../views/InventoryPage.vue";
 
 const routes = [
-  { path: "/", component: Login },
+  { path: "/", component: Login, name: 'Login'},
   { path: "/dashboard", component: Dashboard },
   { path: "/book-room", component: BookRoom },
   { path: "/inventory", component: Inventory },

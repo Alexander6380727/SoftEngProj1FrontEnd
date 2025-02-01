@@ -1,95 +1,106 @@
 <template>
-  <div class="user-page">
-    <h1>Your Dashboard</h1>
+  <div class="dashboard-page">
+    <h1 class="welcome-text">{{ role }} Dashboard</h1>
+
+    <!-- Display Dashboard Items for All Roles -->
     <div class="dashboard-grid">
-      <DashboardBox route="/book-room" icon="calendar">
-        Book Room
-      </DashboardBox>
-      <DashboardBox route="/inventory" icon="box">
-        View Inventory
-      </DashboardBox>
+      <DashboardBox
+          v-for="item in dashboardItems"
+          :key="item.route"
+          :route="item.route"
+          :icon="item.icon"
+          :name="item.name"
+      />
     </div>
-    <h2>Upcoming Bookings</h2>
-    <div v-if="bookings.length === 0">No upcoming bookings.</div>
-    <ul v-else>
-      <li v-for="booking in bookings" :key="booking.room_id">
-        Room: {{ booking.room_id }}, Date: {{ booking.booking_date }}, Time: {{ booking.start_time }} - {{ booking.end_time }}
-      </li>
-    </ul>
+
+    <!-- User-Specific Upcoming Bookings -->
+    <div v-if="role === 'user'" class="user-dashboard-section">
+      <h2>Upcoming Bookings</h2>
+      <div v-if="bookings.length === 0">No upcoming bookings.</div>
+      <ul v-else>
+        <li v-for="booking in bookings" :key="booking.room_id">
+          Room: {{ booking.room_id }}, Date: {{ booking.booking_date }},
+          Time: {{ booking.start_time }} - {{ booking.end_time }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import api from "../services/api";
 import DashboardBox from "../components/DashboardBox.vue";
 
 export default {
-  components: { DashboardBox },
+  components: {DashboardBox},
   data() {
     return {
-      bookings: [] // Array to store user's bookings
+      dashboardItems: [], // Items fetched from backend
+      bookings: [], // User-specific bookings fetched for "user" role
+      role: localStorage.getItem("role"), // User's role
     };
   },
-  created() {
-    this.fetchUserBookings();
+  async created() {
+    const token = localStorage.getItem("token");
+
+    // Fetch dashboard items for all roles
+    try {
+      const response = await api.get("/dashboard", {params: {token}});
+      this.dashboardItems = response.data;
+    } catch (error) {
+      alert("Failed to fetch dashboard items.");
+    }
+
+    // Fetch bookings if the role is "user"
+    if (this.role === "user") {
+      this.fetchUserBookings(token);
+    }
   },
   methods: {
-    fetchUserBookings() {
-      const token = localStorage.getItem('access_token'); // Retrieve the token from local storage
-      if (!token) {
-        console.error('No access token found');
-        return;
-      }
+    async fetchUserBookings(token) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/booking/user-bookings`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      // Fetch bookings using the token
-      fetch(`http://127.0.0.1:8000/booking/user-bookings`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      .then(response => {
         if (!response.ok) {
-          throw new Error('Failed to fetch bookings');
+          throw new Error("Failed to fetch bookings");
         }
-        return response.json();
-      })
-      .then(data => {
-        this.bookings = data.bookings; // Store bookings in the component state
-      })
-      .catch(error => {
-        console.error('Error fetching bookings:', error);
-      });
-    }
-  }
+
+        const data = await response.json();
+        this.bookings = data.bookings; // Populate bookings array
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    },
+  },
 };
 </script>
 
-<style scoped>
-.user-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f9f9f9;
-  font-family: Arial, sans-serif;
-  padding: 5rem;
-  text-align: center;
+<style>
+.dashboard-page {
+  padding: 20px;
 }
 
 .dashboard-grid {
-  display: flex;
-  flex-direction: column; /* Stack the boxes vertically */
-  align-items: center;
-  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
 }
 
-.user-page ul {
+.user-dashboard-section {
+  margin-top: 40px;
+}
+
+ul {
   list-style-type: none;
   padding: 0;
 }
 
-.user-page li {
+li {
   margin: 10px 0;
 }
 </style>
