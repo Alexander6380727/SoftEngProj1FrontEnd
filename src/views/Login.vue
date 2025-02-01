@@ -29,13 +29,14 @@ export default {
   },
   methods: {
     async login() {
+      console.log("Attempting to log in with:", this.username, this.password); // Debugging line
       try {
         const response = await api.post("/auth/login", {
           username: this.username,
           password: this.password,
         });
 
-        const {access_token, role, user_id} = response.data;
+        const { access_token, role, user_id } = response.data;
 
         // Store user information
         localStorage.setItem("token", access_token);

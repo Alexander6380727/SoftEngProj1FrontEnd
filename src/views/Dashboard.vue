@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-page">
-    <h1 class="welcome-text">{{ role }} Dashboard</h1>
+    <h1 class="welcome-text">{{ capitalizedRole }} Dashboard</h1>
 
     <!-- Dashboard Items -->
     <div class="dashboard-grid">
@@ -51,6 +51,11 @@ export default {
       bookings: [], // Bookings fetched for both user and admin roles
       role: localStorage.getItem("role"), // User role
     };
+  },
+  computed: {
+    capitalizedRole() {
+      return this.role ? this.role.charAt(0).toUpperCase() + this.role.slice(1) : '';
+    }
   },
   async created() {
     const token = localStorage.getItem("token");
