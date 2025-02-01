@@ -1,7 +1,7 @@
 <template>
-  <div class="login-page">
+  <div class="page">
 
-    <form @submit.prevent="login" class="login-form">
+    <form @submit.prevent="login" class="sections">
       <div style="text-align: center;">
         <h1>LabSolve</h1>
       </div>
@@ -57,25 +57,6 @@ export default {
 </script>
 
 <style scoped>
-/* General Styles */
-.login-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f9f9f9;
-  font-family: Arial, sans-serif;
-}
-
-/* Login Form */
-.login-form {
-  background-color: white;
-  padding: 70px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
-}
-
 /* Labels */
 label {
   font-size: 14px;

@@ -13,28 +13,30 @@
       />
     </div>
 
-    <!-- User Dashboard View -->
-    <div v-if="role === 'user'" class="user-dashboard-section">
-      <h2>Your Upcoming Bookings</h2>
-      <div v-if="bookings.length === 0">No upcoming bookings.</div>
-      <ul v-else>
-        <li v-for="booking in bookings" :key="booking.id">
-          Room: {{ booking.room_id }}, Date: {{ booking.booking_date }},
-          Time: {{ booking.start_time }} - {{ booking.end_time }}
-        </li>
-      </ul>
-    </div>
+    <div class="sections">
+      <!-- User Dashboard View -->
+      <div v-if="role === 'user'" class="user-dashboard-section">
+        <h2>Your Upcoming Bookings</h2>
+        <div v-if="bookings.length === 0">No upcoming bookings.</div>
+        <ul v-else>
+          <li v-for="booking in bookings" :key="booking.id">
+            Room: {{ booking.room_id }}, Date: {{ booking.booking_date }},
+            Time: {{ booking.start_time }} - {{ booking.end_time }}
+          </li>
+        </ul>
+      </div>
 
-    <!-- Admin Dashboard View -->
-    <div v-if="role === 'admin'" class="admin-dashboard-section">
-      <h2>Today's Bookings</h2>
-      <div v-if="bookings.length === 0">No bookings for today.</div>
-      <ul v-else>
-        <li v-for="booking in bookings" :key="booking.id">
-          User: {{ booking.user_id }}, Room: {{ booking.room_id }},
-          Date: {{ booking.booking_date }}, Time: {{ booking.start_time }} - {{ booking.end_time }}
-        </li>
-      </ul>
+      <!-- Admin Dashboard View -->
+      <div v-if="role === 'admin'" class="admin-dashboard-section">
+        <h2>Today's Bookings</h2>
+        <div v-if="bookings.length === 0">No bookings for today.</div>
+        <ul v-else>
+          <li v-for="booking in bookings" :key="booking.id">
+            User: {{ booking.user_id }}, Room: {{ booking.room_id }},
+            Date: {{ booking.booking_date }}, Time: {{ booking.start_time }} - {{ booking.end_time }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -119,15 +121,39 @@ export default {
 };
 </script>
 
-<style>
-.dashboard-page {
-  padding: 20px;
+<style scoped>
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
 }
 
 .dashboard-grid {
+  align-items: center;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px;
+}
+
+.input-container {
+  margin: 20px 0;
+}
+
+.btn {
+  background-color: #1976D2; /* Primary color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #155a8a; /* Darker shade on hover */
 }
 
 .user-dashboard-section {
@@ -137,9 +163,5 @@ export default {
 ul {
   list-style-type: none;
   padding: 0;
-}
-
-li {
-  margin: 10px 0;
 }
 </style>
