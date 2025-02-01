@@ -6,11 +6,12 @@ import BookRoom from "../views/BookRoomPage.vue";
 import Inventory from "../views/InventoryPage.vue";
 
 const routes = [
-  { path: "/", component: Login, name: 'Login'},
+  { path: "/login", component: Login, name: 'Login'},
   { path: "/dashboard", component: Dashboard },
   { path: "/book-room", component: BookRoom },
   { path: "/inventory", component: Inventory },
   { path: "/register", component: Register },
+  { path: "/", redirect: "/login"},
 ];
 
 const router = createRouter({

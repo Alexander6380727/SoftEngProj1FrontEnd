@@ -37,7 +37,11 @@
 
     <!-- AVAILABLE ROOMS SELECTION -->
     <div v-for="room in availableRooms" :key="room.id">
-      <BookRoomBox :room="room" @room-selected="handleRoomSelection" />
+      <BookRoomBox
+        :room="room"
+        :isSelected="selectedRoom && selectedRoom.id === room.id"
+        @room-selected="handleRoomSelection"
+      />
     </div>
 
     <!-- PURPOSE INPUT -->
@@ -53,7 +57,13 @@
     </div>
 
     <!-- CONFIRM BOOKING BUTTON -->
-    <button @click="confirmBooking" class="btn login-btn">Confirm Booking</button>
+    <button
+      :disabled="!selectedDate || !selectedStartTime || !selectedEndTime || !selectedRoom || !bookingPurpose"
+      @click="confirmBooking"
+      class="btn login-btn"
+    >
+      Confirm Booking
+    </button>
   </div>
 </template>
 
@@ -64,73 +74,106 @@ export default {
   components: { BookRoomBox },
   data() {
     return {
-      availableDates: ["2023-10-01", "2023-10-02"],
+      availableDates: this.generateDates(30),
       selectedDate: null,
-      selectedStartTime: null, // Start time selection
+      selectedStartTime: null,
       selectedEndTime: null,
-      calculatedDuration: "", // Time duration
-      timeSlots: this.generateHourlyTimeSlots(), // Dynamically generate hourly time slots including 24:00
-      filteredEndTimeSlots: [], // Dynamically filtered end time slots
+      calculatedDuration: "",
+      timeSlots: this.generateHourlyTimeSlots(),
+      filteredEndTimeSlots: [],
       bookingPurpose: "",
-      rooms: [
-        { id: 1, name: "Room A", available: true },
-        { id: 2, name: "Room B", available: true },
-      ],
       availableRooms: [],
-      selectedRoom: null, // Selected room
-      bookings: [], // Stored booking information
+      selectedRoom: null,
+      bookings: [],
       userId: "user",
     };
   },
+  watch: {
+    selectedDate: "checkAndFetchRooms",
+    selectedStartTime: "checkAndFetchRooms",
+    selectedEndTime: "checkAndFetchRooms",
+  },
   methods: {
-    // Generate 24-hour time slots, including 24:00
+    checkAndFetchRooms() {
+      if (this.selectedDate && this.selectedStartTime && this.selectedEndTime) {
+        this.updateAvailableRooms();
+      }
+    },
+    generateDates(days) {
+      const dates = [];
+      const today = new Date();
+      for (let i = 0; i < days; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        dates.push(date.toISOString().split("T")[0]);
+      }
+      return dates;
+    },
     generateHourlyTimeSlots() {
       const slots = [];
       for (let hour = 0; hour <= 24; hour++) {
         const h = hour < 24 ? hour.toString().padStart(2, "0") : "24";
-        slots.push(`${h}:00`); // Push time in HH:00 format
+        slots.push(`${h}:00`);
       }
       return slots;
     },
-
-    // Update available rooms based on the selected date
     updateAvailableRooms() {
-      this.availableRooms = this.rooms.filter((room) => room.available);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You must be logged in to book a room.");
+        // Optionally, redirect to the login page
+        this.$router.push("/login");
+        return;
+      }
+      if (!this.selectedDate || !this.selectedStartTime) {
+        this.availableRooms = [];
+        return;
+      }
+      fetch(
+          `http://127.0.0.1:8000/api/room-availability?date=${this.selectedDate}&start_time=${this.selectedStartTime}&end_time=${this.selectedEndTime}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+      )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to fetch room availability.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            this.availableRooms = data.available_rooms;
+          })
+          .catch((err) => console.error("Error fetching room availability:", err));
     },
-
-    // Handle room selection
     handleRoomSelection(room) {
-      this.selectedRoom = room;
+      if (this.selectedRoom && this.selectedRoom.id === room.id) {
+        this.selectedRoom = null;
+      } else {
+        this.selectedRoom = room;
+      }
     },
-
-    // Filter valid end times: only show times >=1 hour after the start time
     filterEndTimeSlots() {
       if (this.selectedStartTime) {
-        const minEndTimeInMinutes = this.convertTimeToMinutes(this.selectedStartTime) + 60; // Start time + 60min
+        const minEndTimeInMinutes = this.convertTimeToMinutes(this.selectedStartTime) + 60;
         this.filteredEndTimeSlots = this.timeSlots.filter((time) => {
           const timeInMinutes = this.convertTimeToMinutes(time);
           return timeInMinutes >= minEndTimeInMinutes;
         });
-
-        // Reset end time if it's not a valid filtered option
-        if (
-          this.selectedEndTime &&
-          !this.filteredEndTimeSlots.includes(this.selectedEndTime)
-        ) {
+        if (this.selectedEndTime && !this.filteredEndTimeSlots.includes(this.selectedEndTime)) {
           this.selectedEndTime = null;
         }
       } else {
         this.filteredEndTimeSlots = [];
       }
     },
-
-    // Validate start and end times, then calculate duration
     validateTime() {
       if (this.selectedStartTime && this.selectedEndTime) {
         const startMinutes = this.convertTimeToMinutes(this.selectedStartTime);
         const endMinutes = this.convertTimeToMinutes(this.selectedEndTime);
         if (endMinutes <= startMinutes) {
-          alert("End time must be at least 1 hour after the start time.");
           this.calculatedDuration = "";
           return;
         }
@@ -138,52 +181,51 @@ export default {
         const hours = Math.floor(durationMinutes / 60);
         const minutes = durationMinutes % 60;
         this.calculatedDuration = minutes
-          ? `${hours} Hours and ${minutes} Minutes`
-          : `${hours} Hours`;
+            ? `${hours} Hours and ${minutes} Minutes`
+            : `${hours} Hours`;
       }
     },
-
-    // Convert time in HH:mm to total minutes
     convertTimeToMinutes(time) {
       if (time === "24:00") return 24 * 60;
       const [hours, minutes] = time.split(":").map(Number);
       return hours * 60 + minutes;
     },
-
-    // Confirm and send the booking data to the backend
-    confirmBooking() {
-      if (
-        !this.selectedDate ||
-        !this.selectedStartTime ||
-        !this.selectedEndTime ||
-        !this.selectedRoom ||
-        !this.bookingPurpose
-      ) {
-        alert("Please complete all fields.");
-        return;
-      }
-      const booking = {
-        user_id: this.userId,
-        room_id: this.selectedRoom.id,
-        booking_date: this.selectedDate,
-        booking_start_time: this.selectedStartTime,
-        booking_end_time: this.selectedEndTime,
-        duration: this.calculatedDuration,
-        purpose: this.bookingPurpose,
+    async confirmBooking() {
+      // This assumes `loggedInUser` stores the user's data, including their ID
+      const payload = {
+        user_id: localStorage.getItem("user_id"),        // Ensure user is authenticated and ID is retrieved
+        room_id: this.selectedRoom.id,       // ID of the selected room
+        booking_date: this.selectedDate,     // Date in "YYYY-MM-DD" format
+        start_time: this.startTime,          // Start time in "HH:MM:SS" format
+        end_time: this.endTime,              // End time in "HH:MM:SS" format
+        purpose: this.bookingPurpose         // Purpose of the booking
       };
-      console.log("Booking:", booking);
-      // Example POST request
-      fetch("http://127.0.0.1:8000/booking/book-room", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(booking),
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error("Time slot unavailable.");
-          return res.json();
-        })
-        .then(() => alert("Booking confirmed!"))
-        .catch((err) => console.error(err.message));
+
+      console.log("Payload to be sent:", payload); // Debug: View payload before sending
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/book-room", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Booking Error:", errorData);
+          alert("Failed to create booking: " + (errorData.detail || "Unknown error"));
+          return;
+        }
+
+        const result = await response.json();
+        alert("Booking created successfully!");
+        console.log("Booking result:", result);
+      } catch (err) {
+        console.error("Error during booking request:", err);
+        alert("An error occurred while trying to book the room.");
+      }
     },
   },
 };

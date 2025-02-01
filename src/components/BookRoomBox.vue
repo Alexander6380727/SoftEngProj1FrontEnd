@@ -1,11 +1,15 @@
-<template>
-  <div class="book-room-box" :class="{ selected: isSelected }" @click="toggleSelection">
-    <h2>{{ room.name }}</h2>
-    <p :class="{'available': room.available, 'unavailable': !room.available}">
-      {{ room.available ? 'Available' : 'Unavailable' }}
-    </p>
-  </div>
-</template>
+   <template>
+     <div
+       class="book-room-box"
+       :class="{ selected: isSelected }"
+       @click="emitSelection"
+     >
+       <h2>{{ room.name }}</h2>
+       <p :class="{ available: room.available, unavailable: !room.available }">
+         {{ room.available ? "Available" : "Unavailable" }}
+       </p>
+     </div>
+   </template>
 
 <script>
 export default {
@@ -13,17 +17,16 @@ export default {
     room: {
       type: Object,
       required: true
+    },
+    isSelected: {
+      type: Boolean,
+      default: false // Now required since parent controls the state
     }
   },
-  data() {
-    return {
-      isSelected: false // Track selection state
-    };
-  },
   methods: {
-    toggleSelection() {
-      this.isSelected = !this.isSelected; // Toggle selection
-      this.$emit('room-selected', this.isSelected ? this.room : null); // Emit selected room or null
+    // Emit the selected room to the parent
+    emitSelection() {
+      this.$emit('room-selected', this.room);
     }
   }
 };
@@ -31,24 +34,23 @@ export default {
 
 <style scoped>
 .book-room-box {
-  border: 1px solid #1976D2; /* Use primary color */
+  border: 1px solid blue;
   border-radius: 8px;
   padding: 20px;
+  margin: 15px auto;
   text-align: center;
   cursor: pointer;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  transition: background-color 0.3s, box-shadow 0.3s; /* Add transition for shadow */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
-}
-
-.book-room-box.selected {
-  background-color: #e0f7fa; /* Highlight selected room */
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .book-room-box:hover {
-  background-color: #e0e0e0;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+  background-color: #f5f5f5;
+}
+
+.book-room-box.selected {
+  background-color: #e0f7fa;
+  border-color: #007c91;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .available {

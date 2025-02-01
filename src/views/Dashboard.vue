@@ -2,25 +2,37 @@
   <div class="dashboard-page">
     <h1 class="welcome-text">{{ role }} Dashboard</h1>
 
-    <!-- Display Dashboard Items for All Roles -->
+    <!-- Dashboard Items -->
     <div class="dashboard-grid">
       <DashboardBox
-          v-for="item in dashboardItems"
-          :key="item.route"
-          :route="item.route"
-          :icon="item.icon"
-          :name="item.name"
+        v-for="item in dashboardItems"
+        :key="item.route"
+        :route="item.route"
+        :icon="item.icon"
+        :name="item.name"
       />
     </div>
 
-    <!-- User-Specific Upcoming Bookings -->
+    <!-- User Dashboard View -->
     <div v-if="role === 'user'" class="user-dashboard-section">
-      <h2>Upcoming Bookings</h2>
+      <h2>Your Upcoming Bookings</h2>
       <div v-if="bookings.length === 0">No upcoming bookings.</div>
       <ul v-else>
-        <li v-for="booking in bookings" :key="booking.room_id">
+        <li v-for="booking in bookings" :key="booking.id">
           Room: {{ booking.room_id }}, Date: {{ booking.booking_date }},
           Time: {{ booking.start_time }} - {{ booking.end_time }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Admin Dashboard View -->
+    <div v-if="role === 'admin'" class="admin-dashboard-section">
+      <h2>Today's Bookings</h2>
+      <div v-if="bookings.length === 0">No bookings for today.</div>
+      <ul v-else>
+        <li v-for="booking in bookings" :key="booking.id">
+          User: {{ booking.user_id }}, Room: {{ booking.room_id }},
+          Date: {{ booking.booking_date }}, Time: {{ booking.start_time }} - {{ booking.end_time }}
         </li>
       </ul>
     </div>
@@ -32,34 +44,36 @@ import api from "../services/api";
 import DashboardBox from "../components/DashboardBox.vue";
 
 export default {
-  components: {DashboardBox},
+  components: { DashboardBox },
   data() {
     return {
-      dashboardItems: [], // Items fetched from backend
-      bookings: [], // User-specific bookings fetched for "user" role
-      role: localStorage.getItem("role"), // User's role
+      dashboardItems: [], // Items fetched from the backend
+      bookings: [], // Bookings fetched for both user and admin roles
+      role: localStorage.getItem("role"), // User role
     };
   },
   async created() {
     const token = localStorage.getItem("token");
 
-    // Fetch dashboard items for all roles
+    // Fetch dashboard items (for all roles)
     try {
-      const response = await api.get("/dashboard", {params: {token}});
+      const response = await api.get("/dashboard", { params: { token } });
       this.dashboardItems = response.data;
     } catch (error) {
       alert("Failed to fetch dashboard items.");
     }
 
-    // Fetch bookings if the role is "user"
+    // Fetch bookings based on the role
     if (this.role === "user") {
       this.fetchUserBookings(token);
+    } else if (this.role === "admin") {
+      this.fetchAdminBookings(token);
     }
   },
   methods: {
     async fetchUserBookings(token) {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/booking/user-bookings`, {
+        const response = await fetch(`http://127.0.0.1:8000/booking/user-bookings/${localStorage.getItem("user_id")}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -67,13 +81,33 @@ export default {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to fetch bookings");
+          throw new Error("Failed to fetch user bookings.");
         }
 
         const data = await response.json();
-        this.bookings = data.bookings; // Populate bookings array
+        this.bookings = data.bookings;
       } catch (error) {
-        console.error("Error fetching bookings:", error);
+        console.error("Error fetching user bookings:", error);
+      }
+    },
+
+    async fetchAdminBookings(token) {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/booking/admin-bookings", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch admin bookings.");
+        }
+
+        const data = await response.json();
+        this.bookings = data.bookings;
+      } catch (error) {
+        console.error("Error fetching admin bookings:", error);
       }
     },
   },

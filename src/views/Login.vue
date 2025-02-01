@@ -34,13 +34,20 @@ export default {
           username: this.username,
           password: this.password,
         });
-        const {access_token, role} = response.data;
 
+        const {access_token, role, user_id} = response.data;
+
+        // Store user information
         localStorage.setItem("token", access_token);
         localStorage.setItem("role", role);
+        localStorage.setItem("user_id", user_id); // Store the user ID
 
+        console.log("Login successful. Token:", access_token, "User ID:", user_id);
+
+        // Navigate to dashboard
         this.$router.push("/dashboard");
       } catch (error) {
+        console.error("Error during login:", error);
         alert("Login failed. Please check your credentials.");
       }
     },
