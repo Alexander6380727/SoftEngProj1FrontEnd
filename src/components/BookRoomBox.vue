@@ -5,8 +5,8 @@
        @click="emitSelection"
      >
        <h2>{{ room.name }}</h2>
-       <p :class="{ available: room.available, unavailable: !room.available }">
-         {{ room.available ? "Available" : "Unavailable" }}
+       <p :class="{ available: room.available_times.length > 0, unavailable: room.available_times.length === 0 }">
+         {{ room.available_times.length > 0 ? "Available" : "Unavailable" }}
        </p>
      </div>
    </template>

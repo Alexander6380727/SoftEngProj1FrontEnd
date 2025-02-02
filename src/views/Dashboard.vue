@@ -15,10 +15,10 @@
 
     <!-- User Dashboard View -->
     <div v-if="role === 'user'" class="user-dashboard-section">
-      <h2>Your Upcoming Bookings</h2>
+      <h2 class="upcoming-bookings-title">Your Upcoming Bookings</h2>
       <div v-if="bookings.length === 0">No upcoming bookings.</div>
       <ul v-else>
-        <li v-for="booking in bookings" :key="booking.id">
+        <li v-for="booking in bookings" :key="booking.id" class="booking-item">
           Room: {{ booking.room_id }}, Date: {{ booking.booking_date }},
           Time: {{ booking.start_time }} - {{ booking.end_time }}
         </li>
@@ -27,10 +27,10 @@
 
     <!-- Admin Dashboard View -->
     <div v-if="role === 'admin'" class="admin-dashboard-section">
-      <h2>Today's Bookings</h2>
+      <h2 class="upcoming-bookings-title">Today's Bookings</h2>
       <div v-if="bookings.length === 0">No bookings for today.</div>
       <ul v-else>
-        <li v-for="booking in bookings" :key="booking.id">
+        <li v-for="booking in bookings" :key="booking.id" class="booking-item">
           User: {{ booking.user_id }}, Room: {{ booking.room_id }},
           Date: {{ booking.booking_date }}, Time: {{ booking.start_time }} - {{ booking.end_time }}
         </li>
@@ -73,7 +73,7 @@ export default {
   methods: {
     async fetchUserBookings(token) {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/booking/user-bookings/${localStorage.getItem("user_id")}`, {
+        const response = await fetch(`http://127.0.0.1:8000/api/user-bookings/${localStorage.getItem("user_id")}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ export default {
 
     async fetchAdminBookings(token) {
       try {
-        const response = await fetch("http://127.0.0.1:8000/booking/admin-bookings", {
+        const response = await fetch("http://127.0.0.1:8000/api/admin-bookings", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -127,6 +127,21 @@ export default {
 
 .user-dashboard-section {
   margin-top: 40px;
+}
+
+.upcoming-bookings-title {
+  color: #1976D2;
+  font-size: 1.5em;
+}
+
+.booking-item {
+  color: black;
+  font-size: 1em;
+}
+
+.no-bookings-text {
+  color: gray;
+  font-style: italic;
 }
 
 ul {
