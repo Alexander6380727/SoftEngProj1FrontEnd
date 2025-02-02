@@ -4,8 +4,8 @@
       <h2>
         <span class="item-name">{{ itemName }}</span>
       </h2>
-      <div class="icon-container">  <span v-if="isAdmin" class="edit-icon" @click="editItem">✏️</span><br>
-        <span v-if="isAdmin" class="delete-icon" @click="deleteItem">🗑️</span>
+      <div class="icon-container">  <span v-if="isAdmin" class="edit-icon" @click="editItem">&#9998;</span><br>
+        <span v-if="isAdmin" class="delete-icon" @click="deleteItem">&#10006;</span>
       </div>
     </div>
     <div class="item-details">
@@ -49,6 +49,8 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  align-self: center;
+  align-content: center;
   background-color: white;
 }
 

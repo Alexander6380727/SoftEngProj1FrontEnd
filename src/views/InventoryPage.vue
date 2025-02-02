@@ -1,23 +1,26 @@
 <template>
   <div class="inventory-page">
-    <h1>Inventory</h1>
-    <div class="search-container">
-      <input type="text" v-model="searchQuery" placeholder="Search for items..." />
+    <div class="header-container">
+      <h1>Inventory</h1>
+      <div class="search-container">
+        <span class="search-icon">&#x1F50E;&#xFE0E;</span>  <input type="text" v-model="searchQuery" placeholder="Search for items..." />
+      </div>
     </div>
+
     <div class="inventory-list">
       <InventoryItem
         v-for="item in filteredItems"
-        :key="item.id"
-        :itemName="item.name"
-        :quantity="item.quantity"
-        :unit="item.unit"
-        :isAdmin="isAdmin"
-        :id="item.id"
+      :key="item.id"
+      :itemName="item.name"
+      :quantity="item.quantity"
+      :unit="item.unit"
+      :isAdmin="isAdmin"
+      :id="item.id"
         @edit="openEditModal(item)"
         @delete="deleteItem"
       />
     </div>
-    <button v-if="isAdmin" @click="showModal = true" class="button">Add Item</button>
+    <button v-if="isAdmin" @click="showModal = true" class="add_button">Add Item</button>
 
     <!-- Modal for Adding/Editing Item -->
     <div v-if="showModal" class="modal">
@@ -211,26 +214,48 @@ export default {
 
 <style scoped>
 .inventory-page {
+  background-color: white;
   padding: 20px;
   display: flex;
   flex-direction: column; /* Vertical layout */
   align-items: center; /* Center horizontally */
 
-}.header-container {  display: flex;
-  flex-direction: column; /* Stack title and search vertically */
-  align-items: center; /* Center horizontally */
-  width: 100%; /* Take full width */
-  margin-bottom: 20px; /* Space between header and list */
+}.header-container {
+  /*... */
+  position: fixed; /* Keep the header fixed at the top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white; /* White background for the header */
+  z-index: 10; /* Ensure header is on top */
+  padding: 10px 20px; /* Add some padding to the header */
+}
 
-}.search-container {
-  width: 350px;
-  margin-top: 10px; /* Space between title and search */
+h1 {
+  font-size: 150%;
+  margin: 0; /* Remove default margin on h1 */
+  align-self: flex-start; /* Align the heading to the left */
+}
 
-}.inventory-list {
+.search-container {
+  /*... */
+  margin-top: 20px;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex; /* Use flexbox for icon and input */
+  align-items: center; /* Vertically center icon and input */
+}
+
+.search-icon {
+  margin-right: 5px; /* Add space between icon and input */
+}
+
+.inventory-list {
+  background-color: white;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   grid-gap: 20px;
-  width: 100%;
+  width: 370px;
 
 }
 
@@ -258,10 +283,13 @@ export default {
 
 .modal-content {
   background-color: #fefefe;
+  align-self: center;
+  align-content: center;
   margin: 15% auto;
   padding: 20px;
-  border: 1px solid #888;
   width: 80%;
+  height: 40%;
+  border-radius: 8px;
 }
 
 .close {
@@ -277,4 +305,20 @@ export default {
   text-decoration: none;
   cursor: pointer;
 }
+
+.add_button {
+  background-color: #1976D2;
+  width: 350px;
+  position: fixed; /* Fixed positioning */
+  bottom: 20px; /* Distance from the bottom */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  z-index: 10; /* Ensure button is on top */
+}
+
 </style>
