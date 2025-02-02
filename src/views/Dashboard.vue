@@ -94,7 +94,7 @@ export default {
 
     async fetchAdminBookings(token) {
       try {
-        const response = await fetch("${apiBaseUrl}/api/admin-bookings", {
+        const response = await fetch(`${apiBaseUrl}/api/admin-bookings`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
