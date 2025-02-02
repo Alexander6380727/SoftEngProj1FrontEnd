@@ -29,6 +29,9 @@ export default {
       searchQuery: "",
       items: [], // This will be populated with inventory items
       isAdmin: localStorage.getItem("role") === "admin", // Check if the user is an admin
+      newItemName: "",
+      newItemQuantity: 0,
+      newItemUnit: "",
     };
   },
   computed: {
@@ -39,20 +42,42 @@ export default {
     }
   },
   methods: {
-    addItem() {
-      // Logic to add a new item
+    async AddNewItem() {
+      try {
+        const response = await api.post("/", {
+          name: this.newItemName,
+          quantity: this.newItemQuantity,
+          unit: this.newItemUnit,
+        });
+        this.items.push(response.data); // Add the new item to the list
+        this.newItemName = "";
+        this.newItemQuantity = 0;
+        this.newItemUnit = "";
+      } catch (error) {
+        console.error("Error adding new item:", error);
+      }
+    },
+    async editItem(item) {
+      // Logic to edit the item
+      // This could involve opening a modal or navigating to an edit page
     },
     async fetchItems() {
       try {
-        const response = await api.get("/"); // Fetch inventory items from the backend
-        this.items = response.data; // Populate the items array
+        const response = await api.get("/inventory"); 
+        console.log("Fetched items:", response.data);
+        console.log("Type of fetched items:", typeof response.data); 
+        if (Array.isArray(response.data)) {
+          this.items = response.data; 
+        } else {
+          console.error("Expected an array but got:", response.data);
+        }
       } catch (error) {
         console.error("Error fetching inventory items:", error);
       }
     }
   },
   created() {
-    this.fetchItems(); // Fetch inventory items when the component is created
+    this.fetchItems(); 
   }
 };
 </script>

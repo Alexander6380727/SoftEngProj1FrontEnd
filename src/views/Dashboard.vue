@@ -35,17 +35,6 @@
           </li>
         </ul>
       </div>
-      <!-- Admin Dashboard View -->
-      <div v-if="role === 'admin'" class="admin-dashboard-section">
-        <h2>Today's Bookings</h2>
-        <div v-if="bookings.length === 0">No bookings for today.</div>
-        <ul v-else>
-          <li v-for="booking in bookings" :key="booking.id">
-            User: {{ booking.user_id }}, Room: {{ booking.room_id }},
-            Date: {{ booking.booking_date }}, Time: {{ booking.start_time }} - {{ booking.end_time }}
-          </li>
-        </ul>
-      </div>
     </div>
   </div>
 </template>

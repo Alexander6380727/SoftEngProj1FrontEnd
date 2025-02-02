@@ -1,11 +1,15 @@
 <template>
   <div class="inventory-item-card">
     <div class="item-header">
-      <span class="item-name">{{ itemName }}</span>
+      <h2>
+        <span class="item-name">{{ itemName }}</span>
+      </h2>
       <span v-if="isAdmin" class="edit-icon" @click="editItem">✏️</span>
     </div>
     <div class="item-details">
-      <span>Quantity: {{ quantity }} {{ unit }}</span>
+      <h4>
+        <span>Quantity: {{ quantity }} {{ unit }}</span>
+      </h4>
     </div>
   </div>
 </template>
@@ -38,6 +42,15 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
   background-color: white;
+}
+
+h2 {
+  font-size: medium;
+}
+
+h4 {
+  font-size: small;
+  font-weight: 1;
 }
 
 .item-header {
