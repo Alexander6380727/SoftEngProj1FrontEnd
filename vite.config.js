@@ -5,18 +5,25 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    // Use import.meta.env instead of process.env
-    ...(import.meta.env.MODE === 'development' ? [vueDevTools()] : []),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+export default defineConfig(({ mode }) => {
+  const isDevelopment = mode === 'development';
+
+  return {
+    plugins: [
+      vue(),
+      // Include vueDevTools only in development mode
+      ...(isDevelopment ? [vueDevTools()] : []),
+    ],
+    server: {
+      host: true, // Allow external connections if needed
     },
-  },
-  build: {
-    outDir: 'dist',
-  },
-})
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
+    },
+    build: {
+      outDir: 'dist', // Specify output directory for clarity
+    },
+  };
+});
