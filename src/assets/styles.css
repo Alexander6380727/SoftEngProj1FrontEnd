@@ -6,6 +6,24 @@ body {
   background-color: #f5f5f5; /* Set the global background color */
 }
 
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  height: 100vh;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+}
+
+.sections {
+  background-color: white;
+  border-radius: 10px;
+  padding: 70px;
+  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
 h1, h2, h3 {
   color: #333; /* Dark text for headings */
 }
@@ -17,7 +35,7 @@ h1, h2, h3 {
 }
 
 button {
-  background-color: forestgreen; /* Primary color */
+  background-color: #1976D2; /* Primary color */
   color: white;
   border: none;
   padding: 10px 20px;
@@ -26,7 +44,7 @@ button {
 }
 
 button:hover {
-  background-color: #155a8a; /* Darker shade on hover */
+  background-color: #0e3c5e; /* Darker shade on hover */
 }
 
 input, select {
@@ -43,6 +61,7 @@ input:focus, select:focus {
 
 h1 {
   color: #1976D2; /* Use primary color */
-  font-size: 350;
+  font-size: larger;
   font-weight: bold;
 }
+
