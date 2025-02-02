@@ -83,6 +83,7 @@
 <script>
 import BookRoomBox from "../components/BookRoomBox.vue";
 import SuccessModal from "../components/SuccessModal.vue";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export default {
   components: {
@@ -189,7 +190,7 @@ export default {
 
       // Fetch room availability from the backend
       fetch(
-          `http://127.0.0.1:8000/api/room-availability?date=${this.selectedDate}`,
+          `${apiBaseUrl}/api/room-availability?date=${this.selectedDate}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -271,7 +272,7 @@ export default {
       };
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/book-room", {
+        const response = await fetch(`${apiBaseUrl}/api/book-room`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

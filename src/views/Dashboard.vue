@@ -42,6 +42,7 @@
 <script>
 import api from "../services/api";
 import DashboardBox from "../components/DashboardBox.vue";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export default {
   components: { DashboardBox },
@@ -73,7 +74,7 @@ export default {
   methods: {
     async fetchUserBookings(token) {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/user-bookings/${localStorage.getItem("user_id")}`, {
+        const response = await fetch(`${apiBaseUrl}/api/user-bookings/${localStorage.getItem("user_id")}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -93,7 +94,7 @@ export default {
 
     async fetchAdminBookings(token) {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/admin-bookings", {
+        const response = await fetch("${apiBaseUrl}/api/admin-bookings", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
