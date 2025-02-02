@@ -32,16 +32,14 @@ export default {
 
 <style scoped>
 .dashboard-box {
-  background-color: white;
+  border: 1px solid #1976D2; /* Use primary color */
   border-radius: 8px;
   padding: 20px;
   text-align: center;
   cursor: pointer;
   margin: 10px;
-  width: 170px;
-  height: 170px;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard-box:hover {
