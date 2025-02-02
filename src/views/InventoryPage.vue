@@ -35,7 +35,9 @@
           <option value="L">L</option>
           <option value="mL">mL</option>
         </select>
-        <button @click="isEditing ? updateItem() : submitNewItem()" class="button">{{ isEditing ? 'Update' : 'Submit' }}</button>
+        <span v-if="errorMessage" class="error-message"></span>
+        <button @click="isEditing ? updateItem() : submitNewItem()" class="submit_button">{{ isEditing ? 'Update' : 'Submit' }}</button>
+        <span v-if="successMessage" class="success-message">{{ successMessage }}</span>
       </div>
     </div>
   </div>
@@ -60,6 +62,7 @@ export default {
       isEditing: false, // Flag to determine if editing
       currentItem: null, // Store the item being edited
       errorMessage: "", // To display error messages
+      successMessage: "", // To display success messages
     };
   },
   computed: {
@@ -84,10 +87,14 @@ export default {
     closeModal() {
       this.showModal = false; // Close the modal
       this.isEditing = false; // Reset editing flag
+      this.successMessage = "";
+      this.errorMessage = "";
       this.fetchItems(); // Refresh the inventory items
     },
 
     async updateItem() {
+      this.errorMessage = ""; // Clear any previous error messages
+      this.successMessage = ""; // Clear any previous success messages
       // Input validation
       if (!this.newItemName || this.newItemQuantity <= 0 || !this.newItemUnit) {
         this.errorMessage = "Please fill in all fields correctly.";
@@ -115,6 +122,7 @@ export default {
           });
           this.showModal = false;
           this.resetForm();
+          this.successMessage = "Item updated successfully!"; 
       } else {
             console.error("Error updating item:", response.status, response.data);
             this.errorMessage = `Failed to update item: ${response.status}`; 
@@ -126,6 +134,8 @@ export default {
     },
 
     async submitNewItem() {
+      this.errorMessage = ""; 
+      this.successMessage = "";
       if (!this.newItemName || this.newItemQuantity <= 0 || !this.newItemUnit) {
         this.errorMessage = "Please fill in all fields correctly.";
         return;
@@ -146,6 +156,7 @@ export default {
             this.items = [...this.items, newItem]; // Use spread to create the new array
             this.resetForm();
             this.showModal = false;
+            this.successMessage = "Item added successfully!";
             await this.fetchItems(); 
         } else {
             console.error("Error adding item:", response.status, response.data);
@@ -233,8 +244,7 @@ export default {
 
 h1 {
   font-size: 150%;
-  margin: 0; /* Remove default margin on h1 */
-  align-self: flex-start; /* Align the heading to the left */
+  align-self: center; /* Align the heading to the left */
 }
 
 .search-container {
@@ -279,6 +289,7 @@ h1 {
   overflow: auto;
   background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.4);
+  z-index: 10;
 }
 
 .modal-content {
@@ -286,10 +297,24 @@ h1 {
   align-self: center;
   align-content: center;
   margin: 15% auto;
-  padding: 20px;
+  padding: 40px;
   width: 80%;
   height: 40%;
   border-radius: 8px;
+  display: flex; /* Enable flexbox layout for modal content */
+  flex-direction: column; /* Arrange elements vertically */
+}.modal-content input,.modal-content select {
+  margin-bottom: 10px; /* Add spacing between input fields */
+}.submit_button { /* Style the submit button within the modal */
+  background-color: #1976D2;
+  color: white;
+  align-self: center;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-top: auto; /* Push the button to the bottom */
+  width: calc(100% - 40px); /* Occupy almost full width with padding */
 }
 
 .close {
