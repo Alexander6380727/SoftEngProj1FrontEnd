@@ -321,22 +321,17 @@ export default {
 
 <style scoped>
 .book-room-page {
-  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   min-height: 100vh;
-  padding: 2rem;
-  text-align: center;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
 }
 
-/* Style for "Here you can book rooms for your use." */
 .book-room-page p {
   color: black; /* Ensure paragraph text is black */
-}
-
-/* Display calculated duration style */
-.duration-display p {
-  color: black; /* Ensure duration text is black */
-  font-size: 16px; /* Optional: Adjust text size */
-  font-weight: bold; /* Optional: Add emphasis if needed */
 }
 
 .input-container {

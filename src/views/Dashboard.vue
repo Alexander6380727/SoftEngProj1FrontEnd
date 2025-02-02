@@ -53,6 +53,11 @@ export default {
       role: localStorage.getItem("role"), // User role
     };
   },
+  computed: {
+    capitalizedRole() {
+      return this.role ? this.role.charAt(0).toUpperCase() + this.role.slice(1) : '';
+    }
+  },
   async created() {
     const token = localStorage.getItem("token");
 
@@ -115,15 +120,56 @@ export default {
 };
 </script>
 
-<style>
-.dashboard-page {
-  padding: 20px;
+<style scoped>
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
 }
 
 .dashboard-grid {
+  align-items: center;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px;
+}
+
+.input-container {
+  margin: 20px 0;
+}
+
+.btn {
+  background-color: #1976D2; /* Primary color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #155a8a; /* Darker shade on hover */
+}
+
+.input-container {
+  margin: 20px 0;
+}
+
+.btn {
+  background-color: #1976D2; /* Primary color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #155a8a; /* Darker shade on hover */
 }
 
 .user-dashboard-section {
@@ -148,9 +194,5 @@ export default {
 ul {
   list-style-type: none;
   padding: 0;
-}
-
-li {
-  margin: 10px 0;
 }
 </style>
