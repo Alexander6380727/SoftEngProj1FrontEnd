@@ -1,6 +1,5 @@
 <template>
   <div class="page">
-
     <form @submit.prevent="login" class="sections">
       <div style="text-align: center;">
         <h1>LabSolve</h1>
