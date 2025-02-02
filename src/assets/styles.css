@@ -35,7 +35,7 @@ h1, h2, h3 {
 }
 
 button {
-  background-color: forestgreen; /* Primary color */
+  background-color: #1976D2; /* Primary color */
   color: white;
   border: none;
   padding: 10px 20px;
@@ -44,7 +44,7 @@ button {
 }
 
 button:hover {
-  background-color: #155a8a; /* Darker shade on hover */
+  background-color: #0e3c5e; /* Darker shade on hover */
 }
 
 input, select {

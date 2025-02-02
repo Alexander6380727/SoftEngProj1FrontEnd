@@ -4,7 +4,9 @@
       <h2>
         <span class="item-name">{{ itemName }}</span>
       </h2>
-      <span v-if="isAdmin" class="edit-icon" @click="editItem">✏️</span>
+      <div class="icon-container">  <span v-if="isAdmin" class="edit-icon" @click="editItem">✏️</span><br>
+        <span v-if="isAdmin" class="delete-icon" @click="deleteItem">🗑️</span>
+      </div>
     </div>
     <div class="item-details">
       <h4>
@@ -17,6 +19,7 @@
 <script>
 export default {
   props: {
+    id: Number, // Add id prop
     itemName: String,
     quantity: Number,
     unit: String,
@@ -24,7 +27,12 @@ export default {
   },
   methods: {
     editItem() {
-      // Logic to edit the item
+      this.$emit('edit', { id: this.id, name: this.itemName, quantity: this.quantity, unit: this.unit }); // Emit edit event with item data including id
+    },
+    deleteItem() {
+      if (confirm("Are you sure you want to delete this item?")) { // Confirmation prompt
+        this.$emit('delete', this.id); // Emit delete event with the item's ID
+      }
     }
   }
 };
@@ -50,7 +58,6 @@ h2 {
 
 h4 {
   font-size: small;
-  font-weight: 1;
 }
 
 .item-header {
@@ -62,4 +69,16 @@ h4 {
 .edit-icon {
   cursor: pointer;
 }
+
+.item-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.delete-icon {
+  cursor: pointer;
+  color: red;
+  margin-left: 2px;
+}
 </style>
+
