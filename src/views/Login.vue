@@ -1,6 +1,7 @@
 <template>
-  <div class="page">
-    <form @submit.prevent="login" class="sections">
+  <div class="login-page">
+
+    <form @submit.prevent="login" class="login-form">
       <div style="text-align: center;">
         <h1>LabSolve</h1>
       </div>
@@ -11,7 +12,7 @@
       <label>Password</label>
       <input v-model="password" type="password" placeholder="Enter your password" required />
 
-      <button type="submit" class="button">Sign In</button>
+      <button type="submit" class="login-btn">Sign In</button>
     </form>
   </div>
 </template>
@@ -29,14 +30,13 @@ export default {
   },
   methods: {
     async login() {
-      console.log("Attempting to log in with:", this.username, this.password); // Debugging line
       try {
         const response = await api.post("/auth/login", {
           username: this.username,
           password: this.password,
         });
 
-        const { access_token, role, user_id } = response.data;
+        const {access_token, role, user_id} = response.data;
 
         // Store user information
         localStorage.setItem("token", access_token);
@@ -57,6 +57,25 @@ export default {
 </script>
 
 <style scoped>
+/* General Styles */
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+}
+
+/* Login Form */
+.login-form {
+  background-color: white;
+  padding: 70px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
 /* Labels */
 label {
   font-size: 14px;
